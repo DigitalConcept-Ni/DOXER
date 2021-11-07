@@ -1,0 +1,111 @@
+{% load static %}
+<aside class="main-sidebar sidebar-light-primary elevation-3 ">
+
+    {# IMAGEN Y LOGO DEL SISTEMA   #}
+    <a href="#" class="brand-link">
+        <img src="{% static 'img/CUBE.png' %}" alt="GENESIS Logo" class="brand-image"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">Genesis</span>
+    </a>
+    {# // END IMAGEN Y LOGO DEL SISTEMA   #}
+
+    <div class="sidebar">
+        {# USER PANEL INFO #}
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'img/user.png' %}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ request.user.username }}</a>
+            </div>
+        </div>
+        {# END USER PANEL INFO #}
+
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                {# LINKS INVENTARIO #}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-boxes"></i>
+                        <p>
+                            Inventario
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {# LINK CATEGORIA #}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-th"></i>
+                                <p>
+                                    Categorias
+                                </p>
+                            </a>
+                        </li>
+                        {# LINK PRODUCTOS #}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-truck-loading"></i>
+                                <p>
+                                    Productos
+                                </p>
+                            </a>
+                        </li>
+                        {# LINK VENTAS #}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-shopping-basket"></i>
+                                <p>
+                                    Ventas
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {# // END LINKS INVENTARIO #}
+
+                {# LINKS DIGITALIZACION #}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-file-upload"></i>
+                        <p>
+                            Digitalizacion
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {# LINK CATEGORIA #}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-file-import"></i>
+                                <p>
+                                    Actualizacion
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {# // END LINKS DIGITALIZACION #}
+
+                {# LINK EMPRESA #}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-building"></i>
+                        <p>
+                            Empresas
+                        </p>
+                    </a>
+                </li>
+                {# LINK USUARIOS #}
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user-friends"></i>
+                        <p>
+                            Usuarios
+                        </p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

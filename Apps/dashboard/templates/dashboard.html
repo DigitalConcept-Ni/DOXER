@@ -1,0 +1,102 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+
+{#    <script src="{% static 'js/dashboard.js' %}"></script>#}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3 ">
+                <div class="small-box bg-success shadow-lg">
+                    <div class="inner">
+                        <h3 id="complete">0</h3>
+
+                        <p>Completas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-check-circle"></i>
+                    </div>
+                    <a id="btnComplete" class="small-box-footer" style="cursor: pointer;">Mas informacion <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            {# //END FIRST #}
+
+            <div class="col-md-3">
+                <div class="small-box bg-secondary shadow-lg">
+                    <div class="inner">
+                        <h3 id="revision">0</h3>
+
+                        <p>Revision</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-list-alt"></i>
+                    </div>
+                    <a id="btnRevision" class="small-box-footer" style="cursor: pointer;">Mas informacion <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            {# //END SECOND #}
+
+            <div class="col-md-3">
+                <div class="small-box bg-danger shadow-lg">
+                    <div class="inner">
+                        <h3 id="pending">0</h3>
+
+                        <p>Pendientes</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-clock"></i>
+                    </div>
+                    <a id="btnPending" class="small-box-footer" style="cursor: pointer;">Mas informacion <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            {# //END THIRD #}
+
+            <div class="col-md-3">
+                <div class="small-box bg-info shadow-lg">
+                    <div class="inner">
+                        <h3 id="total">0</h3>
+
+                        <p>Total de Cajas</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-box"></i>
+                    </div>
+                    <a id="btnBox" class="small-box-footer" style="cursor: pointer;">Mas informacion <i
+                            class="fas fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+            {# //END THIRD #}
+        </div>
+    </div>
+
+    <div class="card card-outline card-navy" id="cardEmail" style="display: none">
+        <div class="card-header">
+            <h5 class="card-title"><i class="fas fa-mail-bulk"></i> Correos pendientes de enviar</h5>
+        </div>
+
+        <div class="card-body">
+            <table class="table  table-bordered" id="tableEmail">
+                <thead>
+                <tr id="trow" rel="rowTable">
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block modal %}
+
+{% endblock %}

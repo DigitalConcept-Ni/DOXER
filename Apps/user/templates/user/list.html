@@ -1,0 +1,28 @@
+{% extends 'list.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head_list %}
+    <script src="{% static 'js/userList.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+    <tr>
+    <th scope="col" style="width: 5%">Sucursal</th>
+    <th scope="col" style="width: 15%">Nombre de usuario</th>
+    <th scope="col" style="width: 10%">Nombre</th>
+    <th scope="col" style="width: 10%">Apellido</th>
+    <th scope="col" style="width: 25%">correo</th>
+    <th scope="col" style="width: 10%">Fecha ingreso</th>
+    <th scope="col" style="width: 15%">Opciones</th>
+{% endblock %}
+
+
+{% block modal %}
+    <th scope="col" style="width: 15%">id</th>
+    <th scope="col" style="width: 10%">Usuario</th>
+    <th scope="col" style="width: 70%">Documento</th>
+    <th scope="col" style="width: 5%">Opciones</th>
+{% endblock %}
+
+
