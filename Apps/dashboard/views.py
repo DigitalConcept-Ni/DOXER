@@ -5,6 +5,7 @@ from django.shortcuts import render
 def dashboard(request):
     data = {
         'name': 'Bryan',
-        'surname': 'Urbina'
+        'surname': 'Urbina',
+        'title': 'HOME | DOXER'
     }
     return render(request, 'dashboard.html', data)

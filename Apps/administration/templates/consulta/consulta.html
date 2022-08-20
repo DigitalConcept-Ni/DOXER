@@ -1,0 +1,165 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+    <!--Libreria daterange -->
+    <script src="{% static 'lib/moment-2.25.3/moment.js' %}"></script>
+    <script src="{% static 'lib/daterangepicker-3.1/spanish.js' %}"></script>
+    <script src="{% static 'lib/daterangepicker-3.1/daterangepicker.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'lib/daterangepicker-3.1/daterangepicker.css' %}"/>
+    <script src="{% static 'js/consulta/report.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="card card-navy">
+
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-list"></i>
+                {{ title }}
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row">
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Año desde:</label>
+                        {{ form.date_range }}
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Departamento:</label>
+                        {{ form.departamentos }}
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <label>Documento:</label>
+                        {{ form.documentos }}
+                    </div>
+                </div>
+
+            </div>
+            <hr>
+            <table class="table table-bordered" id="data" style="display: none">
+                <thead>
+                <tr>
+                    <th scope="col">id</th>
+                    <th scope="col">Departamento</th>
+                    <th scope="col">Serie</th>
+                    <th scope="col">Sub Serie</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">Resguardo</th>
+                    <th scope="col">Codigo archivo</th>
+                    <th scope="col">Codigo Cliente</th>
+                    <th scope="col">Archivo</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <a class="btn bg-navy btn-flat" id="btn_query">
+                <i class="fas fa-info"></i> Consultar
+            </a>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block modal %}
+
+    <th scope="col">id</th>
+    <th scope="col">Fecha de</th>
+    <th scope="col">Fehca hasta</th>
+    <th scope="col">Mes de</th>
+    <th scope="col">Mes hasta</th>
+    <th scope="col">Año de</th>
+    <th scope="col">Año hasta</th>
+
+{% endblock %}
+
+{% block modal_title %}
+    Informacion adicional
+{% endblock %}
+
+{% block modal_footer %}
+
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><i
+                class="fab fa-slack"></i>Informacion de la plantilla</h5>
+    </div>
+
+    <div class="modal-body">
+
+        <table class="table table-borderless" id="tbTemplate">
+            <thead>
+            <tr>
+                <th style="width: 30%">Nombre campo</th>
+                <th style="width: 70%">Valor</th>
+            </tr>
+
+            </thead>
+
+            <tbody>
+            </tbody>
+
+        </table>
+
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    <div class="modal fade" id="modalInfo2" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"><i
+                            class="fab fa-slack"></i>Documentos en este expediente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <table class="table  table-bordered" id="tableInfoDocument">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Expediente</th>
+                            <th scope="col">Documento</th>
+                            <th scope="col">Fecha de</th>
+                            <th scope="col">Fehca hasta</th>
+                            <th scope="col">Mes de</th>
+                            <th scope="col">Mes hasta</th>
+                            <th scope="col">Año de</th>
+                            <th scope="col">Año hasta</th>
+                            <th scope="col">Archivo</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

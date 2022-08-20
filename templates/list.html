@@ -1,6 +1,5 @@
-{% extends 'vtc/body.html' %}
+    {% extends 'vtc/body.html' %}
 {% load static %}
-
 {% block head %}
     <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}"/>
     <link rel="stylesheet"
@@ -26,17 +25,13 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <table class="table stripe" id="tableData">
+            <table class="table  table-striped" id="tableData">
                 <thead>
-                {# Insercion de columnas #}
                 {% block columns %}
-
+                
                 {% endblock %}
                 </thead>
                 <tbody>
-                {% block rows %}
-
-                {% endblock %}
                 </tbody>
             </table>
         </div>
@@ -45,7 +40,7 @@
         <div class="card-footer">
             <a href="{{ create_url }}" type="button" id="btn_registro" class="btn bg-orange"
                style="color: white !important;">
-                <i class="fas fa-plus"></i>Alta
+                <i class="fas fa-plus"></i> Alta
             </a>
 
             {% block btn_query_modal %}
@@ -53,5 +48,4 @@
             {% endblock %}
         </div>
     </div>
-
 {% endblock %}

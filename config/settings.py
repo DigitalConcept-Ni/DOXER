@@ -28,6 +28,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,10 +41,11 @@ INSTALLED_APPS = [
     'Apps.login',
     'Apps.user',
     'Apps.dashboard',
+    'Apps.indexing',
+    'Apps.administration',
     # LIBS
     'widget_tweaks',
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

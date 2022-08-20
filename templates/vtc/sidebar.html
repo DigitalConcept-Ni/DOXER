@@ -1,11 +1,11 @@
 {% load static %}
-<aside class="main-sidebar sidebar-light-primary elevation-3 ">
+<aside class="main-sidebar sidebar-light-navy elevation-4">
 
     {# IMAGEN Y LOGO DEL SISTEMA   #}
     <a href="#" class="brand-link">
-        <img src="{% static 'img/CUBE.png' %}" alt="GENESIS Logo" class="brand-image"
+        <img src="{% static 'img/DOXER-LOGO-03.png' %}" alt="DOXER-LOGO" class="brand-image"
              style="opacity: .8">
-        <span class="brand-text font-weight-light">Genesis</span>
+        <span class="brand-text font-weight-light">DOXER</span>
     </a>
     {# // END IMAGEN Y LOGO DEL SISTEMA   #}
 
@@ -24,7 +24,7 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {# LINKS INVENTARIO #}
-                <li class="nav-item">
+                {% comment %}<li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-boxes"></i>
                         <p>
@@ -35,16 +35,25 @@
                     <ul class="nav nav-treeview">
                         {# LINK CATEGORIA #}
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{% url 'inventory:category_list' %}" class="nav-link">
                                 <i class="nav-icon fas fa-th"></i>
                                 <p>
                                     Categorias
                                 </p>
                             </a>
                         </li>
+                        {# LINK SUPPLIERS #}
+                        <li class="nav-item">
+                            <a href="{% url 'inventory:supplier_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>
+                                    Proveedores
+                                </p>
+                            </a>
+                        </li>
                         {# LINK PRODUCTOS #}
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{% url 'inventory:products_list' %}" class="nav-link">
                                 <i class="nav-icon fas fa-truck-loading"></i>
                                 <p>
                                     Productos
@@ -61,25 +70,45 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>{% endcomment %}
                 {# // END LINKS INVENTARIO #}
 
-                {# LINKS DIGITALIZACION #}
+                {# LINKS ADMINISTRATIONS #}
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-file-upload"></i>
+                        <i class="nav-icon fas fa-user-cog"></i>
                         <p>
-                            Digitalizacion
+                            Administracion
                             <i class="fas fa-angle-left right"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        {# LINK CATEGORIA #}
+                        {# LINK DEPARTAMENTOS #}
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-file-import"></i>
+                            <a href="{% url 'administration:departamentos_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-building"></i>
                                 <p>
-                                    Actualizacion
+                                    Departamentos
+                                </p>
+                            </a>
+                        </li>
+
+                        {# LINK EXPEDIENTES #}
+                        <li class="nav-item">
+                            <a href="{% url 'administration:expedients_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-folder-open"></i>
+                                <p>
+                                    Expedientes
+                                </p>
+                            </a>
+                        </li>
+
+                        {# LINK DOCUMENTOS #}
+                        <li class="nav-item">
+                            <a href="{% url 'administration:documentos_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>
+                                    Documentos
                                 </p>
                             </a>
                         </li>
@@ -87,9 +116,95 @@
                 </li>
                 {# // END LINKS DIGITALIZACION #}
 
-                {# LINK EMPRESA #}
+                {# LINKS ACTUALIZACION #}
+                {#                <li class="nav-item">#}
+                {#                    <a href="#" class="nav-link">#}
+                {#                        <i class="nav-icon fas fa-file-upload"></i>#}
+                {#                        <p>#}
+                {#                            Actualizacion#}
+                {#                            <i class="fas fa-angle-left right"></i>#}
+                {#                        </p>#}
+                {#                    </a>#}
+                {#                    <ul class="nav nav-treeview">#}
+                {# LINK ACADEMICO #}
+                {#                        <li class="nav-item">#}
+                {#                            <a href="{% url 'indexingindexing:index_document2' %}" class="nav-link">#}
+                {#                                <i class="nav-icon fas fa-users"></i>#}
+                {#                                <p>#}
+                {#                                    Academico#}
+                {#                                </p>#}
+                {#                            </a>#}
+                {#                        </li>#}
+                {# LINK ADMINISTRATIVO #}
+                {#                        <li class="nav-item">#}
+                {#                            <a href="{% url 'indexingindexing:index_document2' %}" class="nav-link">#}
+                {#                                <i class="nav-icon fas fa-users"></i>#}
+                {#                                <p>#}
+                {#                                    Administrativo#}
+                {#                                </p>#}
+                {#                            </a>#}
+                {#                        </li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+
+                {# LINKS MATRIZ #}
                 <li class="nav-item">
                     <a href="#" class="nav-link">
+                        <i class="fab fa-mendeley"></i>
+                        <p>
+                            Matriz
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        {# LINK DEPARTAMENTOS #}
+                        <li class="nav-item">
+                            <a href="{% url 'administration:serials_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-building"></i>
+                                <p>
+                                    Serie
+                                </p>
+                            </a>
+                        </li>
+
+                        {# LINK EXPEDIENTES #}
+                        <li class="nav-item">
+                            <a href="{% url 'administration:sub_serials_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-folder-open"></i>
+                                <p>
+                                    Sub Serie
+                                </p>
+                            </a>
+                        </li>
+
+                        {# LINK DOCUMENTOS #}
+                        <li class="nav-item">
+                            <a href="{% url 'administration:documents_type_list' %}" class="nav-link">
+                                <i class="nav-icon fas fa-file-alt"></i>
+                                <p>
+                                    Tipo Documento
+                                </p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                {# // END LINKS MATRIX #}
+
+                {# LINK INDEXING #}
+                <li class="nav-item">
+                    <a href="{% url 'indexing:index_document' %}" class="nav-link">
+                        <i class="nav-icon fas fa-cloud-upload-alt"></i>
+                        <p>
+                            Indexacion
+                        </p>
+                    </a>
+                </li>
+                {# // END LINKS ACTUALIZACION #}
+
+
+                {# LINK EMPRESA #}
+                <li class="nav-item">
+                    <a href="{% url 'panel:enterprise_list' %}" class="nav-link">
                         <i class="nav-icon fas fa-building"></i>
                         <p>
                             Empresas
@@ -98,7 +213,7 @@
                 </li>
                 {# LINK USUARIOS #}
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{% url 'panel:user_list' %}" class="nav-link">
                         <i class="nav-icon fas fa-user-friends"></i>
                         <p>
                             Usuarios
@@ -109,3 +224,4 @@
         </nav>
     </div>
 </aside>
+

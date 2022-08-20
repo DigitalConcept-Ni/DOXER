@@ -1,12 +1,12 @@
 from django.forms import *
 
-from Apps.user.models import User
+from Apps.user.models import *
 
 
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'is_superuser', 'is_staff', 'branch']
+        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'is_superuser', 'is_staff', 'enterprise']
         widgets = {
             'first_name': TextInput(
                 attrs={
@@ -34,7 +34,6 @@ class UserForm(ModelForm):
                     'placeholder': 'Ingrese correo electronico',
                     'autofocus': True
                 }),
-            'branch': Select()
         }
         exclude = ['last_login', 'date_joined']
 
@@ -57,3 +56,12 @@ class UserForm(ModelForm):
         except Exception as e:
             data['error'] = str(e)
         return data
+
+
+class EnterpriseForm(ModelForm):
+    class Meta:
+        model = Enterprises
+        fields = ['name', 'manager', 'address', 'phone_number', 'email']
+        widgets = {
+            'email': EmailInput(),
+        }

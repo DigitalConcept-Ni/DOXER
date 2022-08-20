@@ -1,0 +1,235 @@
+{% extends 'list.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head_list %}
+    <!-- Etiquetas para select2 -->
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <script src="{% static 'js/expedients/create_expedients.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <form action="." method="post" enctype="multipart/form-data">
+        <div class="card card-outline card-navy">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+
+                {% csrf_token %}
+
+                <input type="hidden" name="action" value="{{ action }}">
+
+                <!-- Primera card INFORMACION DEL TIPO DOCUEMNTAL -->
+                <div class="card card-navy">
+
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-info-circle"></i> Informacion Documental</h3>
+                    </div>
+
+                    <div class="card-body">
+
+                        <!-- PRIEMRA FILA -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Departamento: </label>
+                                    {{ form.departament|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Serie Documental: </label>
+                                    {{ form.serial|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Sub Serie: </label>
+                                    {{ form.sub_serial|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SEGUNDA FILA -->
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label>Documento: </label>
+                                    {{ form.document_type|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Resguarado en: </label>
+                                    {{ form.status|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Codigo Archivo: </label>
+                                    {{ form.file_code|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Codigo Cliente: </label>
+                                    {{ form.client_code|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            {# INCLUDE PERSONAL INFO #}
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Informacion Personal: </label>
+                                    {{ form.personal_info }}
+{#                                    <Select name="personal_info" class="form-control" id="id_personal_info">#}
+{#                                        <option value="1">Si</option>#}
+{#                                        <option value="0" selected>No</option>#}
+{#                                    </Select>#}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TERCERA FILA | INCLUDE FILE IF NECESARY -->
+                        {#                       <div class="row" style="display: flex; align-items: flex-end">#}
+                        {#                            <div class="col-md-8">#}
+                        {#                                <div class="form-group" id="before-file">#}
+                        {#                                    <label>Archivo: </label>#}
+                        {#                                    {{ form.file|add_class:'form-control'|attr:'autocomplete:off' }}#}
+                        {#                                </div>#}
+                        {#                            </div>#}
+                        {##}
+                        {##}
+                        {#                        </div>#}
+
+                        <!-- CUARTA FILA -->
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Descripcion: </label>
+                                    {{ form.description|add_class:'form-control'|attr:'autocomplete:off'|attr:'style:resize:none;' }}
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- CARD INFORMACION PERIODICA -->
+                <div class="card card-navy">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="fas fa-info-circle"></i> Informacion periodica</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- TERCERA FILA -->
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha De: </label>
+                                    {{ form.date_of|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Fecha Hasta: </label>
+                                    {{ form.date_to|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Mes De: </label>
+                                    {{ form.month_of|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Mes Hasta: </label>
+                                    {{ form.month_to|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Año de: </label>
+                                    {{ form.year_of|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label>Año Hasta: </label>
+                                    {{ form.year_to|add_class:'form-control'|attr:'autocomplete:off' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD INFORMACION PERSONAL DEL EXPEDIENTE -->
+                <div class="row" id="card-personal">
+                    <div class="col-md-12">
+                        <div class="card card-navy">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-info-circle"></i> Informacion Personal</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- Ingreso de los datos / Tabla de los datos -->
+                                <div id="dataContainer"></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+                <button type="submit" id="btn_registro" class="btn bg-success"
+                        style="color: white !important;">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger"><i class="fas fa-ban"></i> Cancelar</a>
+                <a class="btn btn-danger" id="prueba"><i class="fas fa-ban"></i> PRUEBA</a>
+
+                {% block btn_query_modal %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </form>
+
+    {% if action == 'edit' %}
+        <script>
+            fields.items.det_personal_info = {{ detail|safe }};
+            {#if (fields.items.det_personal_info.length === 1) {#}
+            {#    $('#id_personal_info').attr('disabled', 'true')#}
+            {#}#}
+
+
+        </script>
+    {% endif %}
+
+
+{% endblock %}

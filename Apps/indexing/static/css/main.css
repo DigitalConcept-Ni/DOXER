@@ -1,0 +1,18 @@
+body {
+    background: #F4F6F9;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+.miniatures {
+    background: #F4F6F9;
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+    flex-basis: 150px;
+    width: 100%;
+}

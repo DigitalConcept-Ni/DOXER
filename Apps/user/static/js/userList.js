@@ -1,58 +1,38 @@
-var tbuser;
 $(function () {
-    tbuser = $('.table').DataTable({
-        responsive: true,
-        autoWidth: false,
-        detroy: true,
-        deferRender: true,
-        ajax: {
-            url: window.location.pathname,
-            type: 'POST',
-            data: {
-                'action': 'search_user',
+    let config = [{
+        targets: [0, 1, 2, 3, 4, 5, 6, 7],
+        class: 'text-center'
+    },
+        {
+            targets: [7],
+            render: function (data, type, row) {
+                var buttons = '<a title="Editar registro" rel="edit" type="button" class="btn btn-secondary"><i class="fas fa-edit"></i></a>';
+                buttons += '<a title="Eliminar registro" rel="delete"  type="button" class="btn btn-danger" style="margin: 0 5px 0 5px"><i class="fas fa-trash"></i></a>';
+                // buttons += '<a title="Historial de modificaciones" rel="history" type="button" class="btn bg-olive" style="color: white;"><i class="fas fa-history"></i></a>';
+                return buttons;
             },
-            dataSrc: ""
-        },
-        columns: [
-            {"data": "id"},
-            {"data": "username"},
-            {"data": "first_name"},
-            {"data": "last_name"},
-            {"data": "email"},
-            {"data": "date_joined"},
-            {"data": "date_joined"},
-        ],
-        columnDefs: [
-            {
-                targets: [0],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    if (row.branch === ''){
-                        return '';
-                    } else {
-                        return row.branch;
-                    }
-                },
-            },
-             {
-                targets: [1, 2, 3, 4, 5],
-                class: 'text-center',
-            },
-            {
-                targets: [6],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    var buttons = '<a href="/user/update/' + row.id + '/" type="button" class="btn btn-warning"><i class="fas fa-edit"></i></a>';
-                    buttons += '<a href="/user/delete/' + row.id + '/" type="button" class="btn btn-danger" style="margin: 0 5px"><i class="fas fa-trash"></i></a>';
-                    // buttons += '<a title="permisos" rel="documents" type="button" class="btn btn-secondary" style="color: white"><i class="fas fa-file-alt"></i></a>';
-                    return buttons;
-                },
-            },
-        ],
-        initComplete: function (settings, json) {
         }
-    });
 
+    ]
+    let data = {
+        'action': 'search_user',
+        'inserInto': 'rowTable',
+        'th': ['id', 'Empresa', 'Nombre Usuario', 'Nombre', 'Apellido', 'Correo', 'Fecha Ingreso', 'Opciones'],
+        'table': 'tableData',
+        'config': config,
+        'modal': false
+    };
+    drawTables(data);
+
+    $('.table tbody').on('click', 'a[rel="edit"]', function (){
+        var tr = tableData.cell($(this).closest('td, li')).index();
+        var data = tableData.row(tr.row).data();
+        location = '/panel/user/update/' + data[0] + '/';
+    }).on('click', 'a[rel="delete"]', function (){
+        var tr = tableData.cell($(this).closest('td, li')).index();
+        var data = tableData.row(tr.row).data();
+        location = '/panel/user/delete/' + data[0] + '/';
+    })
+
+    // $('#modalInfo').modal('show');
 })

@@ -1,0 +1,32 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+    <script src="{% static 'js/expedients/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Departamento</th>
+        <th scope="col">Numero de serie</th>
+        <th scope="col">Documento</th>
+        <th scope="col">Resguardo</th>
+        <th scope="col">Codigo archivo</th>
+        <th scope="col">Codigo Cliente</th>
+        <th scope="col">Opciones</th>
+    </tr>
+
+{% endblock %}
+
+{% block rows %}
+
+{% endblock %}
+
+{#{% block modal %}#}
+{#    <th scope="col">Id</th>#}
+{#    <th scope="col">Nombre del campo</th>#}
+{#    <th scope="col">Tipo de dato almacenado</th>#}
+{#    <th scope="col"></th>#}
+{#{% endblock %}#}

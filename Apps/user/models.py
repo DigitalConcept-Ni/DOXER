@@ -10,6 +10,8 @@ class Enterprises(models.Model):
     phone_number = models.CharField(max_length=15, verbose_name='Telefono')
     email = models.EmailField(max_length=30, verbose_name='Correo')
 
+    def __str__(self):
+        return self.name
     class Meta:
         verbose_name = 'Empresa'
         verbose_name_plural = 'Empresas'
@@ -17,7 +19,7 @@ class Enterprises(models.Model):
 
 
 class User(AbstractUser):
-    enterprise = models.ForeignKey(Enterprises, on_delete=models.CASCADE, verbose_name='Empresa')
+    enterprise = models.ForeignKey(Enterprises, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Empresa')
 
     def __str__(self):
         return self.username
