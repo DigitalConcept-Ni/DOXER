@@ -1,0 +1,12 @@
+@import 'loader.css';
+
+table.dataTable thead {
+    /*background-color: rgb(74,190,123) ;*/
+    background-color: #001F3F;
+    color: azure;
+    text-align: center;
+}
+
+[id] {
+    scroll-margin-top: 2ex;
+}

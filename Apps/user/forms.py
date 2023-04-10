@@ -6,7 +6,7 @@ from Apps.user.models import *
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'is_superuser', 'is_staff', 'enterprise']
+        fields = ['first_name', 'last_name', 'username', 'password', 'email', 'is_superuser', 'is_staff']
         widgets = {
             'first_name': TextInput(
                 attrs={
@@ -58,10 +58,10 @@ class UserForm(ModelForm):
         return data
 
 
-class EnterpriseForm(ModelForm):
-    class Meta:
-        model = Enterprises
-        fields = ['name', 'manager', 'address', 'phone_number', 'email']
-        widgets = {
-            'email': EmailInput(),
-        }
+# class EnterpriseForm(ModelForm):
+#     class Meta:
+#         model = Enterprises
+#         fields = ['name', 'manager', 'address', 'phone_number', 'email']
+#         widgets = {
+#             'email': EmailInput(),
+#         }

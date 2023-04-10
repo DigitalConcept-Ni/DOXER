@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ERP',
+        'NAME': 'doxer',
         'USER': 'postgres',
         'PASSWORD': '00Dascher',
         'HOST': 'localhost',

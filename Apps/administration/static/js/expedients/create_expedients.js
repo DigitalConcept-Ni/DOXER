@@ -133,9 +133,7 @@ $(function () {
 
         submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
             // fields.items.personal_info.length = 0;
-            // location.href = '/administracion/expedientes/list';
-            // console.log('Procesos terminado con exito')
-            console.log('Proceso terminado')
+            location.href = '/administracion/expedientes/list';
         });
 
     });

@@ -8,6 +8,34 @@ body {
     vertical-align: baseline;
 }
 
+/*ESTILOS DEL MENU DE SELECCION DE LA PARTE DEL INDEXING    */
+
+#menu {
+    background: transparent;
+    height: 590px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    position: fixed;
+    left: 0;
+    z-index: 1;
+    transition: ease-out 0.5s;
+    top: 0;
+}
+
+.width__largo {
+    display: flex;
+    position: relative;
+    align-items: center;
+    height: 100%;
+    width: 1920px;
+    max-width: 90%;
+}
+
+#menu.oculto {
+    top: -700px;
+}
+
 .miniatures {
     background: #F4F6F9;
     display: flex;
@@ -15,4 +43,61 @@ body {
     flex-wrap: wrap;
     flex-basis: 150px;
     width: 100%;
+}
+
+/*ESTILOS DE LA NUEVA PARTE DE ACTUALIZACION 08/12/2021*/
+
+canvas {
+    border-style: solid;
+    border-color: transparent;
+    border-width: 5px;
+    cursor: pointer;
+}
+
+canvas:hover{
+    border-color: #f7931e;
+}
+
+.page {
+    position: relative;
+    margin: 20px 20px;
+}
+
+.colored-border {
+    border-color: #f7931e;
+}
+
+.confirm-checkbox {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 35px;
+    width: 35px;
+    background-color: #ffffff99;
+    border: 1px solid #f7931e;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+input[type="checkbox"]:after {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 30px;
+    color: white;
+    content: '\f00c';
+    display: none;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #f7931e;
+}
+
+input[type="checkbox"]:checked:after {
+    display: block;
 }

@@ -1,8 +1,46 @@
 {% extends 'list.html' %}
 {% load static %}
+{% load widget_tweaks %}
 
 {% block head_list %}
     <script src="{% static 'js/expedients/list.js' %}"></script>
+{% endblock %}
+
+
+{% block query %}
+    <div class="card card-navy card-outline ">
+
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-search"></i>
+                {{ title_query }}
+            </h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-gr oup">
+                            <label>Expediente: </label>
+                            {{ form.expedients|add_class:'form-control select2'|attr:'autocomplete:off' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button id="btn-query-listview" type="button" class="btn bg-success" style="height: 50%;">Buscar</button>
+            <a href="{{ create_url }}" type="button" id="btn_registro" class="btn bg-orange"
+               style="color: white !important;">
+                <i class="fas fa-plus"></i> Alta
+            </a>
+
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block columns %}
@@ -25,8 +63,13 @@
 {% endblock %}
 
 {#{% block modal %}#}
-{#    <th scope="col">Id</th>#}
-{#    <th scope="col">Nombre del campo</th>#}
-{#    <th scope="col">Tipo de dato almacenado</th>#}
-{#    <th scope="col"></th>#}
+{#    <tr>#}
+{#        <th scope="col">Id</th>#}
+{#        <th scope="col">Expediente</th>#}
+{#        <th scope="col">Nombres</th>#}
+{#        <th scope="col">Apellidos</th>#}
+{#        <th scope="col">Cedula</th>#}
+{#        <th scope="col">Direccion</th>#}
+{#        <th scope="col">Telefono</th>#}
+{#    </tr>#}
 {#{% endblock %}#}

@@ -1,149 +1,210 @@
-from datetime import datetime
+import json
 
 from django.db import models
+from datetime import datetime
+
 from django.forms import model_to_dict
 
-from Apps.user.models import User
+# from config.settings import MEDIA_URL, STATIC_URL
+from Apps.administration.generic import lista_personals
+from Apps.administration.models import Documents, Branches
+from Apps.user.models import *
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=20, verbose_name='Nombre', unique=True)
-    desc = models.CharField(max_length=100, null=True, blank=True, verbose_name='Descripción')
+# class Document(models.Model):
+#     name = models.CharField(max_length=50, unique=True, verbose_name='Tipo Documento')
+#
+#     def __str__(self):
+#         return self.name
+#
+#     def toJSON(self):
+#         item = model_to_dict(self)
+#         return item
+#
+#     class Meta:
+#         verbose_name = 'Document'
+#         verbose_name_plural = 'Documents'
+#         ordering = ("id",)
+
+
+class Boxes(models.Model):
+    branch = models.ForeignKey(Branches, on_delete=models.CASCADE, verbose_name='Sucursal')
+    document = models.ForeignKey(Documents, on_delete=models.CASCADE)
+    personal_info = models.IntegerField(choices=lista_personals, default=0)
+    code = models.CharField(max_length=10, unique=True, verbose_name='Caja')
+    status = models.CharField(max_length=1, verbose_name='Estado')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario')
+    # DATES
+    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha Registro')
+    start_date = models.DateField(default=datetime.now, verbose_name='Fecha Inicio')
+    end_date = models.DateField(default=datetime.now, verbose_name='Fecha Fin')
 
     def __str__(self):
-        return self.name
+        return self.branch.name + self.code
+
+    def quantity_of_items(self):
+        item = len([i for i in BoxDetailExpedients.objects.filter(box_id=self.id)])
+        return item
+
+    def toJSON(self, user, staff):
+        item = model_to_dict(self)
+        item['branch_name'] = self.branch.name
+        item['date_joined'] = self.date_joined.strftime("%Y-%m-%d")
+        item['items'] = self.quantity_of_items()
+        item['user'] = self.user.username
+        item['is_superuser'] = user
+        item['is_staff'] = staff
+        return item
+
+    class Meta:
+        verbose_name = 'Box'
+        verbose_name_plural = 'Boxes'
+        ordering = ['date_joined']
+
+
+# REFERENCES OF PERSONALS EXPEDIENTS FOR THE BOX
+class BoxDetailExpedients(models.Model):
+    box = models.ForeignKey(Boxes, on_delete=models.CASCADE)
+    file_code = models.CharField(max_length=10)  # codigo archivo
+    client_code = models.CharField(max_length=10)  # codigo cliente
+    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha Documento')
+    names = models.CharField(max_length=30)
+    surnames = models.CharField(max_length=30)
+    card_id = models.CharField(max_length=16)
+    address = models.CharField(max_length=100)
+    phone_number = models.CharField(max_length=8)
+    # PART OF VALIDATION THE DOCUMENT
+    exists = models.CharField(max_length=1, verbose_name='Existencia')
+    joined = models.CharField(max_length=1, verbose_name='Agregado')
+
+    # file = models.FileField(upload_to='administrativos/%Y/%m/%d', null=True, blank=True)f)
+
+    def __str__(self):
+        return '{} -- {}'.format(self.file_code, self.client_code)
+
+    # def toLIST(self):
+    #     item = [self.id, self.departament.name, self.serial.name, self.document_type.name, self.status,
+    #             self.file_code, self.client_code, self.id, self.personal_info]
+    #     return item
 
     def toJSON(self):
         item = model_to_dict(self)
+        # item['date_of'] = self.date_of.strftime("%Y-%m-%d")
+        # item['date_of'] = self.date_of
         return item
 
     class Meta:
-        verbose_name = 'Categoria'
-        verbose_name_plural = 'Categorias'
+        verbose_name = 'Expedient'
+        verbose_name_plural = 'Expedients'
+        ordering = ("id",)
+
+
+# REFERENCES OF DOCUMENTS FOR THE BOX
+class BoxDetailDocuments(models.Model):
+    box = models.ForeignKey(Boxes, on_delete=models.CASCADE)
+    document = models.ForeignKey(Documents, on_delete=models.CASCADE)
+    client = models.CharField(max_length=30, verbose_name='Cliente')
+    code = models.CharField(max_length=10, verbose_name='Codigo')
+    date = models.DateField(default=datetime.now, verbose_name='Fecha Documento')
+    # PART OF VALIDATION THE DOCUMENT
+    exists = models.CharField(max_length=1, verbose_name='Existencia')
+    joined = models.CharField(max_length=1, verbose_name='Agregado')
+
+    # def __str__(self):
+    #     return self.cliente
+
+    def toJSON(self, it):
+        item = model_to_dict(self)
+        item['branch_name'] = self.box.branch.name
+        item['branch_code'] = self.box.branch.code
+        item['exists'] = int(self.exists)
+        item['joined'] = int(self.joined)
+        item['item'] = it
+        # item['canceled_date'] = self.canceled_date.strftime("%Y-%m-%d")
+        return item
+
+    class Meta:
+        verbose_name = 'Document'
+        verbose_name_plural = 'Documents'
         ordering = ['id']
 
 
-class Suppliers(models.Model):
-    name = models.CharField(max_length=30, verbose_name='Nombre')
-    seller = models.CharField(max_length=30, verbose_name='Vendedor')
-    address = models.CharField(max_length=150, verbose_name='Direccion')
-    email = models.EmailField(max_length=30, verbose_name='Correo')
-    phone_number = models.CharField(max_length=8, verbose_name='Numero de telefono')
-
-    def __str__(self):
-        return self.name
+# DETAIL FOR THE FILES OF THE EXPEDIENTS
+class BoxDetailFileExpedients(models.Model):
+    expedient = models.ForeignKey(BoxDetailExpedients, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # date change notification
+    date = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='Fecha de subida')
+    # FILES
+    file = models.FileField(upload_to='expedients/%Y/%m/%d', null=True, blank=True)
 
     def toJSON(self):
         item = model_to_dict(self)
+        item['user'] = self.user.username
+        item['box_number'] = self.expedient.box.code
+        item['branch_name'] = self.expedient.box.branch.name
+        item['date'] = self.date.strftime("%Y-%m-%d -- %H:%M:%S")
         return item
 
     class Meta:
-        verbose_name = 'Proveedor'
-        verbose_name_plural = 'Proveedores'
-        ordering = ['id']
+        verbose_name = 'Box_Details_File'
+        verbose_name_plural = 'Box_Detail_Files'
+        ordering = ['date']
 
 
-class Product(models.Model):
-    cat = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='Categoría')
-    supplier = models.ForeignKey(Suppliers, on_delete=models.CASCADE, verbose_name='Proveedor')
-    name = models.CharField(max_length=150, verbose_name='Nombre')
-    brand = models.CharField(max_length=30, verbose_name='Marca')
-    # image = models.ImageField(upload_to='product/%Y/%m/%d', null=True, blank=True, verbose_name='Imagen')
-    cost = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de compra')
-    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, verbose_name='Precio de venta')
-
-    def __str__(self):
-        return self.name
+# DETAIL FOR THE FILES OF THE DOCUMENTS
+class BoxDetailFileDocuments(models.Model):
+    document = models.ForeignKey(BoxDetailDocuments, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # date change notification
+    date = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='Fecha de subida')
+    # FILES
+    file = models.FileField(upload_to='documents/%Y/%m/%d', null=True, blank=True)
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['cat'] = self.cat.toJSON()
-        # item['image'] = self.get_image()
-        item['pvp'] = format(self.pvp, '.2f')
+        item['user'] = self.user.username
+        item['box_number'] = self.document.box.code
+        item['branch_name'] = self.document.box.branch.name
+        item['date'] = self.date.strftime("%Y-%m-%d -- %H:%M:%S")
         return item
 
-    # def get_image(self):
-    #     if self.image:
-    #         return '{}{}'.format(MEDIA_URL, self.image)
-    #     return '{}{}'.format(STATIC_URL, 'img/empty.png')
-
     class Meta:
-        verbose_name = 'Producto'
-        verbose_name_plural = 'Productos'
-        ordering = ['id']
+        verbose_name = 'Box_Details_File'
+        verbose_name_plural = 'Box_Detail_Files'
+        ordering = ['date']
 
 
-class Client(models.Model):
-    names = models.CharField(max_length=150, verbose_name='Nombres')
-    surnames = models.CharField(max_length=150, verbose_name='Apellidos')
-    email = models.EmailField(max_length=30, verbose_name='Correo')
-    dni = models.CharField(max_length=10, unique=True, verbose_name='Cedula')
-    phone_number = models.CharField(max_length=8, verbose_name='Numero de telefono')
-    address = models.CharField(max_length=150, null=True, blank=True, verbose_name='Dirección')
-    gender_choices = (['M', 'MASCULINO'],
-                      ['F', 'FEMENINO'])
-    gender = models.CharField(max_length=10, choices=gender_choices, default='M', verbose_name='Sexo')
-
-    def __str__(self):
-        return self.names
+class BoxDetailFollow(models.Model):
+    box = models.ForeignKey(Boxes, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='Fecha de cambio')
+    comment = models.CharField(max_length=300, null=True, blank=True, verbose_name='Comentario')
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['gender'] = {'id': self.gender, 'name': self.get_gender_display()}
-        # item['date_birthday'] = self.date_birthday.strftime('%Y-%m-%d')
+        item['user'] = self.user.username
+        item['box_number'] = self.box.code
+        item['branch_name'] = self.box.branch.name
+        item['date'] = self.date.strftime("%Y-%m-%d -- %H:%M:%S")
         return item
 
     class Meta:
-        verbose_name = 'Cliente'
-        verbose_name_plural = 'Clientes'
-        ordering = ['id']
+        verbose_name = 'Box_Details_Follows'
+        verbose_name_plural = 'Box_Detail_Follow'
+        ordering = ['date']
 
 
-class Sale(models.Model):
-    cli = models.ForeignKey(Client, on_delete=models.CASCADE,  verbose_name='Cliente')
-    user = models.ForeignKey(User, on_delete=models.CASCADE,  verbose_name='Usuario')
-    date_joined = models.DateField(default=datetime.now)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-
-    def __str__(self):
-        return self.cli.names
+class SendEmails(models.Model):
+    follow = models.ForeignKey(BoxDetailFollow, on_delete=models.CASCADE)
+    send = models.CharField(max_length=1, default=0, verbose_name='Enviado')
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['cli'] = self.cli.toJSON()
-        item['subtotal'] = format(self.subtotal, '.2f')
-        item['iva'] = format(self.iva, '.2f')
-        item['total'] = format(self.total, '.2f')
-        item['date_joined'] = self.date_joined.strftime('%Y-%m-%d')
-        item['det'] = [i.toJSON() for i in self.detsale_set.all()]
+        item['follow'] = self.follow.toJSON()
         return item
 
     class Meta:
-        verbose_name = 'Venta'
-        verbose_name_plural = 'Ventas'
-        ordering = ['id']
-
-
-class DetSale(models.Model):
-    sale = models.ForeignKey(Sale, on_delete=models.CASCADE)
-    prod = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    cant = models.IntegerField(default=0)
-    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-
-    def __str__(self):
-        return self.prod.name
-
-    def toJSON(self):
-        item = model_to_dict(self, exclude=['sale'])
-        item['prod'] = self.prod.toJSON()
-        item['price'] = format(self.price, '.2f')
-        item['subtotal'] = format(self.subtotal, '.2f')
-        return item
-
-    class Meta:
-        verbose_name = 'Detalle de Venta'
-        verbose_name_plural = 'Detalle de Ventas'
-        ordering = ['id']
+        verbose_name = 'SendEmail'
+        verbose_name_plural = 'SendEmails'
+        ordering = ['send']

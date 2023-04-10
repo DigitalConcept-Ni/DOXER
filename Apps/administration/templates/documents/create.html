@@ -13,7 +13,7 @@
 
 {% block content %}
 
-    <form action="." method="post" enctype="multipart/form-data">
+        <form action="." method="post" enctype="multipart/form-data" id="form-document">
         <div class="card card-navy card-outline">
             <div class="card-header">
                 <h3 class="card-title">
@@ -43,14 +43,14 @@
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label>Expediente: </label>
-                                    {{ form.expedients|add_class:'form-control'|attr:'autocomplete:off' }}
+                                    {{ form.expedients|add_class:'form-control select2'|attr:'autocomplete:off' }}
                                 </div>
                             </div>
 
                             <div class="col-md-5">
                                 <div class="form-group">
                                     <label>Documento: </label>
-                                    {{ form.document_type|add_class:'form-control'|attr:'autocomplete:off' }}
+                                    {{ form.document_type|add_class:'form-control select2'|attr:'autocomplete:off' }}
                                 </div>
                             </div>
 

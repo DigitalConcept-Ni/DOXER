@@ -1,7 +1,10 @@
 {% extends 'home.html' %}
 {% block body %}
+
     <body class="hold-transition sidebar-mini sidebar-collapse">
+
     <div class="wrapper">
+
         <!-- Header -->
         {% include 'vtc/header.html' %}
         <!-- Sidebar -->
@@ -50,9 +53,7 @@
                                             <table class="table  table-bordered" id="tableInfoIndexado">
                                                 <thead>
                                                 <tr id="trow" rel="rowModal">
-                                                    {% block modal %}
 
-                                                    {% endblock %}
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -66,7 +67,7 @@
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                             </button>
-                                            <button type="submit" class="btn btn-secondary">Guardar</button>
+{#                                            <button type="submit" class="btn btn-secondary">Guardar</button>#}
                                         </div>
                                     {% endblock %}
                                 </div>
@@ -91,6 +92,11 @@
 
     {% endblock %}
     <script>
+        $('.select2').select2({
+            // data: data,
+            theme: "bootstrap4",
+            language: 'es'
+        });
         {% if messages %}
             var html = '<p>';
             {% for message in messages %}

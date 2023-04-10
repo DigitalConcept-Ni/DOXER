@@ -43,7 +43,7 @@ $(function () {
     });
 
 // Evento envio de informacion
-    $('form').on('submit', function (e) {
+    $('#form-document').on('submit', function (e) {
         e.preventDefault();
         values();
         // var parameters = $(this).serializeArray();

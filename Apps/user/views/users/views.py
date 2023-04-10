@@ -19,13 +19,17 @@ class UsersListview(LoginRequiredMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         data = {}
         try:
+            print(request.POST)
             action = request.POST['action']
             if action == 'search_user':
                 data = []
+                u = User.objects.all()
+                print(u)
+                # data.append(u.id, u.username, u.username, u.first_name, u.last_name, u.email)
                 for u in User.objects.all():
-                    data.append([u.id, u.enterprise.name, u.username, u.first_name, u.last_name, u.email,
-                                 u.date_joined.strftime('%Y-%m-%d'), u.enterprise.id])
-                # print(data)
+                    data.append([u.id, u.username, u.first_name, u.last_name, u.email,
+                                 u.date_joined.strftime('%Y-%m-%d'), u.id])
+                print(data)
         except Exception as e:
             print(e)
             data['error'] = 'Ha ocurrido un error, verificar datos'

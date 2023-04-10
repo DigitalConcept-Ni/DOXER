@@ -4,13 +4,14 @@ Designed by Bryan Urbina Guevara | Digital Concept
 
 se esta utilizando asyncronia para no tener errores en el procesodel dibujado
 
- action = La accion en la vista donde recolectara la informacion para dibujar (metodo post)
- insertInto = Indica en que tabla de todo el lienzo vamos a dibujar la tabla
- th = Define una celda de encabezado en una tabla
- table = nombre de la tabla donde se dibujara
- modal = true (Mostrar el modal en caso que hayan datos que mostrar en tabla del modal) ---  false (para no mostrar el modal
- config = configuracion por separado de las columnas (formato de DataTables ejm:
- config = [{
+url = URL a donde haremos la llamada mediante AJAX
+action = La accion en la vista donde recolectara la informacion para dibujar (metodo post)
+insertInto = Indica en que tabla de todo el lienzo vamos a dibujar la tabla
+th = Define una celda de encabezado en una tabla
+table = nombre de la tabla donde se dibujara
+modal = true (Mostrar el modal en caso que hayan datos que mostrar en tabla del modal) ---  false (para no mostrar el modal
+config = configuracion por separado de las columnas formato de DataTables ejm:
+config = [{
              targets: [0, 1],
              class: 'text-center'
           }];
@@ -46,7 +47,7 @@ const tableColumn = async (data, table, insertInto) => {
         let trow = $(`#${table} tr[rel=${insertInto}]`).empty();
         let th = '';
         $.each(data, v => {
-            th += `<th>${data[v]}</th>`;
+            th += `<th style="width: auto">${data[v]}</th>`;
         })
         trow.append(th)
     }
@@ -65,7 +66,7 @@ const drawTables = async (data) => {
             destroy: true,
             orderable: false,
             ajax: {
-                url: window.location.pathname,
+                url: data.url,
                 type: 'POST',
                 data: {
                     'action': data.action,
@@ -74,7 +75,6 @@ const drawTables = async (data) => {
             },
             columnDefs: data.config,
             initComplete: function (settings, json) {
-
             }
         })
         if (data.modal === true) {
@@ -82,33 +82,3 @@ const drawTables = async (data) => {
         }
     }
 }
-
-const drawTablesData = async (data) => {
-    var header = await tableColumn(data.th, data.table);
-
-    if (header === true) {
-        tbDash = $(`#${data.table}`).DataTable({
-            // dom: 'Btip',
-            deferRender: true,
-            responsive: true,
-            autoWidth: false,
-            destroy: true,
-            orderable: false,
-            ajax: {
-                url: window.location.pathname,
-                type: 'POST',
-                data: {
-                    'action': data.action,
-                },
-                dataSrc: ""
-            },
-            columnDefs: data.config,
-            initComplete: function (settings, json) {
-
-            }
-        })
-        if (data.modal === true) {
-            $('#modalInfo').modal('show');
-        }
-    }
-};

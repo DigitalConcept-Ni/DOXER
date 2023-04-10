@@ -1,25 +1,45 @@
 {% extends 'list.html' %}
 {% load static %}
+{% load widget_tweaks %}
+
+
 
 {% block head_list %}
     <script src="{% static 'js/documents/list.js' %}"></script>
 {% endblock %}
 
-{% block columns %}
+{% block query %}
+    <div class="card card-navy card-outline ">
 
-    <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Expediente</th>
-        <th scope="col">Codigo Cliente</th>
-        <th scope="col">Documento</th>
-        <th scope="col">Fecha</th>
-        <th scope="col">Archivo</th>
-        <th scope="col">Opciones</th>
-    </tr>
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-search"></i>
+                {{ title_query }}
+            </h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-gr oup">
+                            <label>Documento: </label>
+                            {{ form.documents|add_class:'form-control select2'|attr:'autocomplete:off' }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
 
-{% endblock %}
-
-{% block rows %}
+        <div class="card-footer">
+            <button id="btn-query-listview" type="button" class="btn bg-success" style="height: 50%;">Buscar</button>
+            <a href="{{ create_url }}" type="button" id="btn_registro" class="btn bg-orange"
+               style="color: white !important;">
+                <i class="fas fa-plus"></i> Alta
+            </a>
+        </div>
+    </div>
 
 {% endblock %}
 

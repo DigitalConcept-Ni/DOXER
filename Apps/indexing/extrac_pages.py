@@ -1,63 +1,59 @@
 import os.path
 
 from PyPDF2 import PdfFileReader, PdfFileWriter
-# from tablib import Dataset
-
 # from Aplicaciones.RRHH.models import Indexaciones
 # from Aplicaciones.masivo.resources import ActualizacionResource
+from django.db import transaction
+
+from Apps.administration.models import Documents
+from config import settings
 
 
 def extract_page(request):
     data = {}
-    doc_name = request['name_file']
-    pages = request.getlist('page')
+    try:
+        doc_name = request['name_file']
+        pages = request.getlist('page')
+        carpeta = request['directory']
 
-    carpeta = request['directory']
-    path = 'C:/repositorios/hemco2/hemco/media/migration/' + carpeta + '/' + doc_name
-    # path = '/home/ubuntu/hemco2/hemco/media/migration/' + carpeta + '/' + doc_name
-    pdf_reader = PdfFileReader(open(path, 'rb'))
-    pdf_writer = PdfFileWriter()
+        #  HERE WE SELECT THE FILE FROM ITS FOLDER
+        path = os.path.join(settings.BASE_DIR, 'media')
+        openfilepath = os.path.join(path, 'indexation', carpeta, doc_name)
 
-    num_pages = ''
-    no_render = []
-    for p in pages:
-        num_pages += '_' + p
-        n = int(p)
-        no_render.append(n)
-        pdf_writer.addPage(pdf_reader.getPage(n))
+        pdf_reader = PdfFileReader(open(openfilepath, 'rb'))
+        pdf_writer = PdfFileWriter()
 
-    name, type = os.path.splitext(doc_name)
+        num_pages = ''
+        no_render = []
+        for p in pages:
+            num_pages += '_' + p
+            n = int(p)
+            no_render.append(n)
+            pdf_writer.addPage(pdf_reader.getPage(n))
 
-    with open('C:/repositorios/hemco2/hemco/media/pages/{}{}.pdf'.format(name, num_pages), 'wb') as salida:
-    # with open('/home/ubuntu/hemco2/hemco/media/pages/{}{}.pdf'.format(name, num_pages), 'wb') as salida:
-        pdf_writer.write(salida)
+        name, type = os.path.splitext(doc_name)
 
-    new_pdf = 'pages/'+name+num_pages+'.pdf'
+        # here we confirm if the folder exists where we will save the files
+        confirmpathfolder = path + '/pages'
+        exist = os.path.exists(confirmpathfolder)
+        if not exist:
+            os.mkdir(confirmpathfolder)
+        with open('{}/{}{}.pdf'.format(confirmpathfolder, name, num_pages), 'wb') as salida:
+            pdf_writer.write(salida)
 
-    cedula = request['cedula']
-    seccion = request['seccion']
-    documento = request['documento']
-    fecha_documento = request['fecha_documento']
+        new_pdf = 'pages/' + name + num_pages + '.pdf'
 
-    dataset = Dataset()
-    dataset.headers = ['id', 'cedula', 'seccion', 'documento', 'fecha_documento', 'archivo']
-    dataset.append(['', cedula, seccion, documento, fecha_documento, new_pdf])
+        with transaction.atomic():
+            dc = Documents()
+            dc.expedients_id = request['expedients']
+            dc.document_type_id = request['document_type']
+            dc.date = request['date']
+            dc.file = new_pdf
+            dc.save()
 
-    actualizacion = ActualizacionResource()
-    result = actualizacion.import_data(dataset, dry_run=True)  # Test the data import
-    # print('problemas: ', result.has_errors())
-    print(result.invalid_rows)
-    if result.has_errors():
-        print('error')
-        data['error'] = 'No ha ingresado ninguna opcion'
-    if not result.has_errors():
-        print('no error')
-        if result.invalid_rows:
-            result.append_invalid_row()
-            data['error'] = 'Hay valores invalidos'
-        else:
-            actualizacion.import_data(dataset, dry_run=False)  # Actually import now
-    index_file = request['num_file']
-    data['no_render'] = no_render
-    data['openFile'] = index_file
+        index_file = request['num_file']
+        data['no_render'] = no_render
+        data['openFile'] = index_file
+    except Exception as e:
+        data['error'] = str(e)
     return data

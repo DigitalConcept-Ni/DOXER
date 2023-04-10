@@ -11,6 +11,21 @@ function message_error(obj) {
     })
 }
 
+function message_info_top(obj) {
+    var html = '<ul style="list-style: none" ">'
+    $.each(obj, function (key, value) {
+        html += '<li>' + value + '</li>'
+    })
+    html += '</ul>';
+    Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: html,
+        showConfirmButton: false,
+        timer: 1200
+    });
+}
+
 
 function message_info(obj) {
     var html = '<ul style="list-style: none;">'
@@ -22,6 +37,25 @@ function message_info(obj) {
         title: 'Proceso Exitoso!',
         html: html,
         icon: 'success'
+    })
+}
+
+function message_info2(obj) {
+    var html = '<ul style="list-style: none;">'
+    $.each(obj, function (key, value) {
+        html += '<li>' + value + '</li>'
+    })
+    html += '</ul>';
+
+    Swal.fire({
+        title: 'Proceso Exitoso',
+        icon: 'success',
+        html: html,
+        confirmButtonText: 'Ok',
+    }).then((result) => {
+        if (result.value === true) {
+            location.reload();
+        }
     })
 }
 

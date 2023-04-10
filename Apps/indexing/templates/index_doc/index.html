@@ -3,11 +3,11 @@
 {% load static %}
 
 {% block head %}
-{#    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.min.js"></script>#}
-{#    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.worker.min.js"></script>#}
-{#    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>#}
-    <script src="{% static 'js/build.js' %}"></script>
-    <script src="{% static 'js/worker.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.min.js"></script>
+    {#        <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.worker.min.js"></script>#}
+    {#    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>#}
+    {#    <script src="{% static 'js/build.js' %}"></script>#}
+    {#    <script src="{% static 'js/worker.js' %}"></script>#}
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
     <!-- Etiquetas para select2 -->
     <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
@@ -22,7 +22,7 @@
 {% endblock %}
 
 {% block indexacion %}
-    <form action="." method="post" enctype="multipart/form-data" id="indexacion">
+    <form action="." method="post" enctype="multipart/form-data" id="indexing">
 
         <div id="menu">
             <div class="width__largo">
@@ -37,7 +37,8 @@
                                     </h3>
                                 </div>
                                 <div class="col-md-6 d-flex flex-row-reverse">
-                                    <a class="btn bg-orange" id="btn_insert_document" title="Insertar documento" style="color:white;"><i
+                                    <a class="btn bg-orange" id="btn_insert_document" title="Insertar documento"
+                                       style="color:white;"><i
                                             class="fas fa-file-upload"></i></a>
                                 </div>
                             </div>
@@ -47,46 +48,37 @@
                         <div class="card-body">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="{{ action }}">
-
-                            {#                            {% for field in form.visible_fields %}#}
-                            {#                                <div class="form-group">#}
-                            {#                                    <label>{{ field.label }}: </label>#}
-                            {#                                    {{ field|add_class:'form-control'|attr:'autocomplete:off' }}#}
-                            {#                                </div>#}
-                            {#                            {% endfor %}#}
-
                             <div class="form-group">
-                                <label>{{ form.expedients.label }}: </label>
+                                <label>Expediente: </label>
                                 {{ form.expedients|add_class:'form-control'|attr:'autocomplete:off' }}
                             </div>
-                            <div class="form-group">
-                                {#                                <label>{{ form.seccion.label }}: </label>#}
-                                {{ form.seccion|add_class:'form-control'|attr:'autocomplete:off' }}
-                            </div>
+
                             <div class="row">
-                                <div class="col-md-10">
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>{{ form.documento.label }}: </label>
-                                        {{ form.documento|add_class:'form-control'|attr:'autocomplete:off' }}
+                                        <label>Tipo de Documento: </label>
+                                        {{ form.document_type|add_class:'form-control'|attr:'autocomplete:off' }}
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+
+                                <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>{{ form.fecha_documento.label }}: </label>
-                                        {{ form.fecha_documento|add_class:'form-control'|attr:'autocomplete:off' }}
+                                        <label>Fecha Documento: </label>
+                                        {{ form.date|add_class:'form-control'|attr:'autocomplete:off' }}
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row" id="block_insert" style="display: none; transition: ease-out 1s;">
+                            <div class="row" id="block_insert" style="  display: none; transition: ease-out 1s;">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <input class="form-control" type="file" name="insert_file" id="insert_file">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <a class="btn bg-navy" id="btn_insert_file" style="color:white;">Insertar Documento <i
-                                            class="fas fa-arrow-circle-right"></i></a>
+                                    <a class="btn bg-navy" id="btn_insert_file" style="color:white;">Insertar Documento
+                                        <i
+                                                class="fas fa-arrow-circle-right"></i></a>
                                 </div>
 
                             </div>
@@ -99,14 +91,15 @@
                                     {#                            <a class="btn btn-primary disabled" id="prev_doc" style="color:white;"><i#}
                                     {#                                    class="fas fa-arrow-circle-left"></i>#}
                                     {#                                Anterior</a>#}
-                                    <a class="btn bg-navy" id="next_doc" style="color:white;">Siguiente <i
+                                    <a class="btn bg-navy disabled" id="next_doc" style="color:white;">Siguiente <i
                                             class="fas fa-arrow-circle-right"></i></a>
-                                    <button type="submit" class="btn btn-success"><i class="fas fa-cloud"></i>
+                                    <a id="btn_indexing" class="btn btn-success disabled" style="color: white"><i
+                                            class="fas fa-cloud"></i>
                                         Indexar
-                                    </button>
+                                    </a>
                                     {#                            <a class="btn btn-warning" id="clean_page"><i#}
                                     {#                                    class="fas fa-broom" style="color: white"></i></a>#}
-                                    <a class="btn btn-danger" id="btn_doc_upgrade" style="color:white; display: none"><i
+                                    <a class="btn btn-danger disabled" id="btn_doc_delete" style="color:white;"><i
                                             class="fas fa-trash-alt"></i></a>
                                 </div>
 
@@ -153,11 +146,9 @@
 {% endblock %}
 
 
-{% block js %}
-
+{% block javascript %}
 
     <script src="{% static 'js/main_index.js' %}"></script>
-
 
 {% endblock %}
 

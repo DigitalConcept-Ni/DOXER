@@ -26,7 +26,7 @@ urlpatterns = [
     path('panel/', include('Apps.user.urls')),
     path('inventario/', include('Apps.inventory.urls')),
     path('administracion/', include('Apps.administration.urls')),
-    path('indexing/', include('Apps.indexing.urls')),
+    # path('indexing/', include('Apps.indexing.urls')),
 ]
 
 if settings.DEBUG:

@@ -13,7 +13,7 @@ from Apps.administration.models import *
 
 
 class DocumentTypeListView(LoginRequiredMixin, ListView):
-    model = Document_type
+    model = Documents
     template_name = 'documents_type/list.html'
 
     @method_decorator(csrf_exempt)
@@ -26,13 +26,8 @@ class DocumentTypeListView(LoginRequiredMixin, ListView):
             data = []
             action = request.POST['action']
             if action == 'search_data':
-                for d in Document_type.objects.all():
-                    data.append(d.toJSON())
-                # print(data)
-            # if action == 'search_history':
-            #     data = []
-            #     for d in Secciones.objects.filter(pk=request.POST['id']):
-            #         data.append(d.toJSON())
+                for d in Documents.objects.all():
+                    data.append([d.id, d.name, d.id])
         except Exception as e:
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
@@ -42,12 +37,12 @@ class DocumentTypeListView(LoginRequiredMixin, ListView):
         context['title'] = 'Tipo de Documentos'
         context['create_url'] = reverse_lazy('administration:documents_type_add')
         context['entity'] = 'Tipo de Documentos'
-        context['list_url'] = reverse_lazy('administration:documentos_list')
+        context['list_url'] = reverse_lazy('administration:documents_type_list')
         return context
 
 
 class DocumentTypeCreateview(LoginRequiredMixin, CreateView):
-    model = Document_type
+    model = Documents
     form_class = DocumentsTypeForms
     template_name = 'documents_type/create.html'
     success_url = reverse_lazy('administration:documents_type_list')
@@ -82,7 +77,7 @@ class DocumentTypeCreateview(LoginRequiredMixin, CreateView):
 
 
 class DocumentTypeUpdateview(LoginRequiredMixin, UpdateView):
-    model = Document_type
+    model = Documents
     form_class = DocumentsTypeForms
     template_name = 'documents_type/create.html'
     success_url = reverse_lazy('administration:documents_type_list')
@@ -118,7 +113,7 @@ class DocumentTypeUpdateview(LoginRequiredMixin, UpdateView):
 
 
 class DocumentTypeDeleteview(LoginRequiredMixin, DeleteView):
-    model = Document_type
+    model = Documents
     form_class = DocumentsTypeForms
     template_name = 'documents_type/delete.html'
     success_url = reverse_lazy('administration:documents_type_list')

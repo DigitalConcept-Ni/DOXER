@@ -12,7 +12,7 @@ $(function () {
 
 
     let select = $('select[name="directory"]');
-    let option = '<option value="">Selecciones una carpeta</option>'
+    let option = '<option value="">Seleccione una carpeta</option>'
 
     //Evento para cargar las carpetas.
     $.ajax({
@@ -23,8 +23,6 @@ $(function () {
         }
     }).done(function (request) {
         carpetas = request.carpetas;
-        $('#next_doc').addClass('disabled');
-
         $.each(carpetas, function (key, value) {
             option += '<option value="' + value.name + '">' + value.name + '</option>';
         });
@@ -33,13 +31,9 @@ $(function () {
         select.html(option);
     });
 
-    var select_seccion = $('input[name="seccion"]');
 
-    $('.select2').select2({
-        data: data,
-        theme: "bootstrap4",
-        language: 'es'
-    });
+    // Seccion para buscar la seccion oculta de los documentos
+    var select_seccion = $('input[name="seccion"]');
 
     $('select[name="documento"]').on('change', function () {
         var id = $(this).val();
@@ -73,7 +67,7 @@ $(function () {
         let scale = 1;
         let viewport = page.getViewport({scale: scale});
 
-        let canvas = $('<canvas class="page-preview" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);"></canvas>');
+        let canvas = $(`<canvas id=${id} class="page-preview" style="box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);"></canvas>`);
         let ctx = canvas[0].getContext('2d');
         canvas[0].width = viewport.width;
         canvas[0].height = viewport.height;
@@ -90,11 +84,11 @@ $(function () {
     function loadMiniatures(pdf) {
         const miniatures = $('.miniatures').empty();
         for (let i = 1; i <= pdf.numPages; i++) {
-            pdf.getPage(i).then(function (page, id) {
-                let canvas = renderPage(page);
-                let inputs = `<div id="${i - 1}">
-            <input type="checkbox" name="page" value="${i - 1}" style="height: 30px; width:30px">
-            <input type="hidden" name="action" value="">
+            pdf.getPage(i).then(function (page) {
+                let id = i - 1;
+                let canvas = renderPage(page, id);
+                let inputs = `<div id="${i - 1}" class="confirm-checkbox">
+            <input type="checkbox" name="page" value="${i - 1}">
                                                 </div>`;
                 let pageContainer = $(`<div class="page" style="order: ${i}" ></div>`)
                     .append(canvas)
@@ -104,6 +98,7 @@ $(function () {
         }
     }
 
+
     //Funcion para crear y preparar lienzo para renderizas cada hoja del pdf
     function crearCanvas() {
         $('.miniatures').empty();
@@ -111,9 +106,12 @@ $(function () {
     }
 
     //Evento para abrir archvio pdf seleccionado desde la lista (archivos) al principio del scrip;
+    let loader = document.getElementById('preloader_container');
     const openFIle = async (filename) => {
+
+        loader.style.display = 'flex';
         let folder = $('#directoryes').val();
-        let url = `/media/migration/${folder}/${filename}`;
+        let url = `/media/indexation/${folder}/${filename}`;
         // let url = '/media/migration/' + filename;
         const loadingTask = pdfjsLib.getDocument(url);
         loadingTask.promise.then(pdf => {
@@ -125,17 +123,10 @@ $(function () {
             document.getElementById('numfile').value = fileNum;
             $('#numfile').attr('value', fileNum);
         });
+
         document.getElementById('docname').value = filename;
         $('#docname').attr('value', filename);
     }
-
-    // let url = '/media/' + 'migration/test.pdf';
-    // const loadingTask = pdfjsLib.getDocument(url);
-    // loadingTask.promise.then(pdf => {
-    //     // The document is loaded here...
-    //     console.log(pdf._pdfInfo.numPages)
-    //     loadMiniatures(pdf)
-    // });
 
     function onPrevDoc() {
         if (fileNum <= 0) {
@@ -161,6 +152,7 @@ $(function () {
     };
 //Evento para enviar los datos de las paginas y donde se guardaran
     $('#indexing').on('submit', function (e) {
+
         e.preventDefault();
         const data = new FormData(this);
         data.append('action', 'indexar');
@@ -175,23 +167,9 @@ $(function () {
                 index_file = response.openFile
                 // openFIle(archivos[index_file]);
                 deletePage();
-                Swal.fire({
-                    position: 'top-end',
-                    icon: 'info',
-                    title: 'Documentos indexados correctamente',
-                    showConfirmButton: false,
-                    timer: 1200
-                });
+                message_info_top({'success': 'Documentos indexados correctamente'})
                 $('#menu').addClass('oculto')
                 $('input[type=checkbox]').prop('checked', false);
-                // $('#last-document')
-                //     .data('document', response.document)
-                //     .removeAttr('disabled');
-                //
-                // $('.miniatures').empty();
-                // $('#docname').val('');
-                // $('.autocomplete-document').val('');
-                // onNextDoc();
             }
         })
     });
@@ -203,14 +181,17 @@ $(function () {
         data.append('carpeta', $('#directoryes').val());
         data.append('action', 'next');
 
-        submit_with_ajax(window.location.pathname, 'Siguiente Documento', '¿Seguro de viasualizar el siguiente documento?', data, function () {
-            if (fileNum >= archivos.length - 1) {
-                return;
-            }
+        submit_with_ajax(window.location.pathname, 'Siguiente Documento', '¿Seguro de viasualizar el siguiente documento? Se eliminara el actual', data, function () {
+            // if (fileNum >= archivos.length - 1) {
+            //     crearCanvas();
+            // }
             openFIle(archivos[fileNum + 1]);
             no_render = []
             const fileInfo = $('#files').val();
             files.value = fileInfo - 1;
+            setTimeout(function () {
+                decoration()
+            }, 2000);
         })
     }
 
@@ -219,10 +200,12 @@ $(function () {
         const _this = $(this);
 
         if (_this.val() === '') {
-            // console.log('vacio')
             crearCanvas();
             document.getElementById('files').value = ''
             $('#next_doc').addClass('disabled');
+            $('#btn_doc_delete').addClass('disabled');
+            $('#btn_indexing').addClass('disabled');
+
         } else {
             $.ajax('.', {
                 url: window.location.pathname,
@@ -233,21 +216,18 @@ $(function () {
                 },
                 success: function (request) {
                     archivos = request.archivos;
+                    console.log(archivos.length)
                     document.getElementById('files').value = request.files;
                     if (archivos.length > 0) {
                         openFIle(archivos[0]);
+                        $('#next_doc').removeClass('disabled');
+                        $('#btn_doc_delete').removeClass('disabled');
+                        $('#btn_indexing').removeClass('disabled');
+                        setTimeout(function () {
+                            decoration()
+                        }, 2000);
                     } else {
                         crearCanvas();
-                    }
-                    $('#next_doc').removeClass('disabled');
-                    if (_this.val() === 'ACTUALIZACION') {
-                        if ($('#files').val() >= 1) {
-                            $('#btn_doc_upgrade').toggle();
-                        }
-                    } else {
-                        if ($('#btn_doc_upgrade').is(':visible')) {
-                            $('#btn_doc_upgrade').hide();
-                        }
                     }
                 }
             })
@@ -274,22 +254,16 @@ $(function () {
                 contentType: false,
                 processData: false,
                 success: function (response) {
-                    // console.log(response);
-                    // archivos = [...response.archivos];
-                    // openPdf(response.filename);
                     $('#insert_file').val(null);
                     $('#block_insert').toggle();
-                    message_info(response)
-                    setTimeout(function () {
-                        location.reload();
-                    }, 1450)
+                    message_info2(response)
                 }
             })
         }
     });
 
     //Boton para eliminar el documento subido
-    $('#btn_doc_upgrade').on('click', function () {
+    $('#btn_doc_delete').on('click', function () {
         const data = new FormData();
         data.append('docname', $('#docname').val());
         data.append('directory', $('#directoryes').val());
@@ -301,7 +275,8 @@ $(function () {
                 crearCanvas();
                 document.getElementById('files').value = 0;
                 $('#next_doc').addClass('disabled');
-                $('#btn_doc_upgrade').toggle();
+                $('#btn_doc_delete').addClass('disabled');
+                $('#btn_indexing').addClass('disabled');
                 return;
             }
             openFIle(archivos[fileNum + 1]);
@@ -311,6 +286,7 @@ $(function () {
     });
 
     //Evento para ocultar y mostrar formulario de indexing
+    let scrollAnterior = window.pageYOffset;
     window.addEventListener("scroll", function (e) {
         var scroll = window.pageYOffset;
 
@@ -328,6 +304,42 @@ $(function () {
         }
         scrollAnterior = scroll;
     })
+
+    // PART TO UPDATE
+
+    function decoration() {
+        console.log('ready')
+        loader.style.display = 'none';
+        let page = $('canvas.page-preview');
+
+        // part of the function for colored the border
+        page.on('click', function (e) {
+            let id = e.currentTarget.id;
+            let inputId = $(`input[value="${id}"]`);
+            if (inputId.prop('checked') === true) {
+                inputId.prop('checked', false);
+            } else if (inputId.prop('checked') === false) {
+                inputId.prop('checked', true);
+                $(`canvas#${id}`).addClass('colored-border');
+            }
+            // console.log(inputId[0].checked)
+            // console.log(e.currentTarget.id);
+        }).on('mouseover', function (e) {
+            let id = e.currentTarget.id;
+            $(`canvas#${id}`).addClass('colored-border');
+        }).on('mouseleave', (e) => {
+            let id = e.currentTarget.id;
+            let inputId = $(`input[value="${id}"]`);
+            if (inputId.prop('checked') === true) {
+                return;
+            } else {
+                $(`canvas#${id}`).removeClass('colored-border');
+            }
+        });
+
+    }
+
+    //END UPDATE
 
 
 // document.getElementById('prev_doc').addEventListener('click', onPrevDoc);
