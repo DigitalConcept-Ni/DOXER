@@ -94,7 +94,7 @@ class DocumentsTypeForms(ModelForm):
 #
 #
 # class ConsultaForm(Form):
-#     expedients = ModelChoiceField(queryset=Expedients.objects.all(), widget=Select(
+#     expedientsAdministration = ModelChoiceField(queryset=Expedients.objects.all(), widget=Select(
 #         attrs={'class': 'form-control'}))
 #
 #     documents = ModelChoiceField(queryset=Documents.objects.all(), widget=Select(

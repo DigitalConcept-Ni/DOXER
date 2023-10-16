@@ -21,12 +21,12 @@
 #         'surname': 'Urbina',
 #         'title': 'HOME | DOXER'
 #     }
-#     return render(request, 'expedients/personal.html', data)
+#     return render(request, 'expedientsAdministration/personal.html', data)
 #
 #
 # class ExpedientsListView(LoginRequiredMixin, ListView):
 #     model = Expedients
-#     template_name = 'expedients/list.html'
+#     template_name = 'expedientsAdministration/list.html'
 #
 #     @method_decorator(csrf_exempt)
 #     def dispatch(self, request, *args, **kwargs):
@@ -74,7 +74,7 @@
 # class ExpedientsCreateview(LoginRequiredMixin, CreateView):
 #     model = Expedients
 #     form_class = DocumentacionForms
-#     template_name = 'expedients/create.html'
+#     template_name = 'expedientsAdministration/create.html'
 #     success_url = reverse_lazy('administration:expedients_list')
 #
 #     @method_decorator(csrf_exempt)
@@ -137,7 +137,7 @@
 # class ExpedientsUpdateiew(LoginRequiredMixin, UpdateView):
 #     model = Expedients
 #     form_class = DocumentacionForms
-#     template_name = 'expedients/create.html'
+#     template_name = 'expedientsAdministration/create.html'
 #     success_url = reverse_lazy('administration:expedients_list')
 #
 #     @method_decorator(login_required)
@@ -224,7 +224,7 @@
 # class ExpedientsDeleteview(LoginRequiredMixin, DeleteView):
 #     model = Expedients
 #     form_class = DocumentacionForms
-#     template_name = 'expedients/delete.html'
+#     template_name = 'expedientsAdministration/delete.html'
 #     success_url = reverse_lazy('administration:expedients_list')
 #
 #     @method_decorator(login_required)

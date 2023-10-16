@@ -1,0 +1,4 @@
+key = {
+	'public': 'pk_test_51N32hNBKLYHm15ZrOuwdPgjmuC2xYQeXqR1yRteyyPf2u7c5pJv8gvmPKfCwpizIqedgEuZ9abFn90R2Csh9nvKX00CL1eJmvL',
+	'secret': 'sk_test_51N32hNBKLYHm15Zrnw0qev8Q2uMqFtMOPZ1lfRaQ5k7WOUkrwJSs7zFgMB9gV46GoxNbRXJfbyUal7SVub5rYIvQ00NZAX6nY9'
+}

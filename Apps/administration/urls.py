@@ -1,7 +1,6 @@
 from django.urls import path
 
 from Apps.administration.views.branches.view import *
-from Apps.administration.views.consultas.view import ConsultasAdministrativaView
 from Apps.administration.views.document_type.view import *
 
 app_name = 'administration'

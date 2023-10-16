@@ -59,6 +59,12 @@ function message_info2(obj) {
     })
 }
 
+//function for formater dates to YYYY-MM-DD
+
+const createDate = (data) => {
+    return data.split("/").reverse().join("-");
+}
+
 function submit_with_ajax(url, title, content, parameters, callback) {
     $.confirm({
         theme: 'material',

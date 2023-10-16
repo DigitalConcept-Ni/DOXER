@@ -5,14 +5,14 @@
 # class IndexingDocumentsForm(ModelForm):
 #     class Meta:
 #         model = Documents
-#         fields = ['expedients', 'document_type', 'date']
+#         fields = ['expedientsAdministration', 'document_type', 'date']
 #
 #         widgets = {
 #             'date': DateInput(format='%Y-%m-%d',
 #                               attrs={
 #                                   'type': 'date'
 #                               }),
-#             'expedients': Select(
+#             'expedientsAdministration': Select(
 #                 attrs={
 #                     'class': 'select2',
 #                 }

@@ -200,7 +200,7 @@
 #         ordering = ("id",)
 #
 # class Documents(models.Model):
-#     expedients = models.ForeignKey(Expedients, on_delete=models.CASCADE)
+#     expedientsAdministration = models.ForeignKey(Expedients, on_delete=models.CASCADE)
 #     document_type = models.ForeignKey(Document_type, on_delete=models.CASCADE)
 #     template = models.ForeignKey(Templates, on_delete=models.CASCADE, null=True, blank=True)
 #     # INFORMACION PERIODICA
@@ -235,7 +235,7 @@
 #
 #     def toJSON(self):
 #         item = model_to_dict(self)
-#         item['expedients'] = self.expedients.toJSON()
+#         item['expedientsAdministration'] = self.expedientsAdministration.toJSON()
 #         item['document_type'] = self.document_type.toJSON()
 #         if self.date_of:
 #             item['date_of'] = self.date_of.strftime("%Y-%m-%d")
@@ -251,7 +251,7 @@
 #         ordering = ("id",)
 #
 # class Detail_Field(models.Model):
-#     expedients = models.ForeignKey(Expedients, on_delete=models.CASCADE, null=True, blank=True)
+#     expedientsAdministration = models.ForeignKey(Expedients, on_delete=models.CASCADE, null=True, blank=True)
 #     document = models.ForeignKey(Documents, on_delete=models.CASCADE, null=True, blank=True)
 #     field = models.ForeignKey(Fields, on_delete=models.CASCADE)
 #     detail = models.CharField(max_length=300)

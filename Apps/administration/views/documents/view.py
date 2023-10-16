@@ -80,7 +80,7 @@
 #                             file = None
 #
 #                         exp = Documents()
-#                         exp.expedients_id = int(detalle['expedients'])
+#                         exp.expedients_id = int(detalle['expedientsAdministration'])
 #                         exp.document_type_id = int(detalle['document_type'])
 #                         exp.date = detalle['date']
 #                         exp.file = file
@@ -141,7 +141,7 @@
 #                             file = None
 #
 #                         exp = self.get_object()
-#                         exp.expedients_id = int(detalle['expedients'])
+#                         exp.expedients_id = int(detalle['expedientsAdministration'])
 #                         exp.document_type_id = int(detalle['document_type'])
 #                         exp.date = detalle['date']
 #                         exp.file = file

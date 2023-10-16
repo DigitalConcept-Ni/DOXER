@@ -1,0 +1,62 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+
+    {#    <script src="{% static 'js/boxes/boxes_list.js' %}"></script>#}
+    <script src="{% static 'js/boxes/boxes_list_query.js' %}"></script>
+    <!-- Para usar los botones -->
+
+{% endblock %}
+
+
+{% block query %}
+    <div class="card card-navy card-outline" id="card-query-result">
+        <div class="card-header">
+            <h3 class="card-title">
+                <i class="fas fa-search"> </i>
+                {{ title_query }}
+            </h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input maxlength="10" id="box-number" type="text" placeholder="Numero de caja"
+                               class="form-control">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <input id="box-date" type="date" placeholder="Fecha desde" class="form-control"
+                               data-toggle="tooltip" data-placement="top" title="Fecha desde">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card-body -->
+
+        <div class="card-footer">
+            <button id="btn-search-box" type="button" class="btn bg-gradient-success">
+                <i class="fas fa-search"> </i>
+                Buscar
+            </button>
+
+            <a href="{{ create_expedients }}" type="button" id="btn_registro" class="btn bg-orange"
+               style="color: white !important;">
+                <i class="fas fa-plus"></i> Alta Expedientes
+            </a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block jsDtButtons %}
+
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js"></script>
+{% endblock %}
+

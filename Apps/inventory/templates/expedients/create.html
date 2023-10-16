@@ -1,0 +1,257 @@
+{% extends 'list.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head_list %}
+    <!-- Etiquetas para select2 -->
+    {#    STYLE FOR THE LASH FORM THE BOXES#}
+    <link rel="stylesheet" href="{% static 'CSS/lash.css' %}">
+
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <script src="{% static 'js/boxes/boxCreateExpedients.js' %}"></script>
+
+{% endblock %}
+
+{% block content %}
+    <form action="." method="post">
+        <div class="card card-navy card-outline ">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="{{ action }}">
+                <input type="hidden" name="currentUser" value="{{ request.user.id }}">
+                <input type="hidden" name="username" value="{{ request.user.username }}">
+                <!--INSERTAR Y INFORMACION DE LA CAJA  -->
+                <div class="row">
+
+                    <!-- LADO IZQUIERDO / INSERCION DE DATOS(CLIENTES - CREDITO - FECHA CANCELADO) -->
+                    <div class="col-md-8">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-box"></i> Datos de expedientes</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- ROW NAMES AND SURNAMES -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {#                                            <label>Nombres:</label>#}
+                                            <input id="names" type="text" maxlength="40" placeholder="Nombres"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            {#                                            <label>Apellidos:</label>#}
+                                            <input id="surnames" type="text" maxlength="40" placeholder="Apellidos"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END ROW NAMES AND SURNAMES -->
+
+                                <!-- ROW CARD_ID AND PHONE_NUMBER-->
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {#                                            <label>Cedula:</label>#}
+                                            <input id="card_id" type="text" maxlength="14" placeholder="Cedula"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {# <label>Telefono: </label>#}
+                                            <input id="phone_number" type="text" maxlength="8" placeholder="Telefono"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {#                                            <label>Codigo Expediente:</label>#}
+                                            <input id="file_code" type="text" maxlength="10" placeholder="Codigo Expediente"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            {#                                            <label>Codigo cliente: </label>#}
+                                            <input id="client_code" type="text" maxlength="10" placeholder="Codigo Cliente"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--// EDN  ROW CARD_ID AND PHONE_NUMBER -->
+
+                                <!-- ROW FILE_CODE, CLIENT_CODE, BTN INSERT AND ADDRESS-->
+                                <div class="row">
+                                    <div class="col-md-10">
+                                        <div class="form-group">
+                                            {#                                            <label>Direccion: </label>#}
+                                            <input id="address" type="text" maxlength="100" placeholder="Direccion"
+                                                   class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-2">
+                                        <button type="button" id="insert_info" class="btn btn-primary">Insertar
+                                        </button>
+                                    </div>
+
+                                </div>
+                                <!--// EDN ROW FILE_CODE, CLIENT_CODE AND ADDRESS -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LADO DERECHO / INSERCION DE DATOS DE LA CAJA-->
+                    <div class="col-md-4" id="container-lash">
+{#                        <div class="lash"><span>Caja</span></div>#}
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-list"></i> Datos de caja</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- START FIRTS ROW -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Sucursal: </label>
+                                            {{ form.branch }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END FIRTS ROW -->
+
+                                <!-- START SECOND ROW -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Documento: </label>
+                                            {{ form.document|attr:'autocomplete:off' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END SECOND ROW -->
+
+                                <!-- START THRID ROW-->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Numero de caja: </label>
+                                            {{ form.code }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Registrada: </label>
+                                            {{ form.date_joined }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END THRID ROW-->
+
+                                <!-- START FOUR ROW-->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Fecha Inicio: </label>
+                                            {{ form.start_date }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Fecha Fin: </label>
+                                            {{ form.end_date }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END FOUR ROW-->
+
+                                <!-- START FOUR ROW // FILA DEL USUARIO ACTUAL OCULTA POR DISEÑO-->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Usuario: </label>
+                                            {% if action == 'add' %}
+                                                <input type="hidden" id="id_user" value="{{ request.user.id }}"
+                                                       class="form-control"
+                                                       readonly>
+                                                <input type="text" value="{{ request.user.username }}"
+                                                       class="form-control"
+                                                       readonly>
+                                            {% elif action == 'edit' %}
+                                                {{ form.user }}
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END SECOND ROW -->
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <!-- DATOS INSERTADOS / TABLA DONDE SE MUESTRAN LOS DATOS INSERTADOS -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-borderless" id="tbListas">
+                            <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Cedula</th>
+                                <th>Telefono</th>
+                                <th>Codgio Expediente</th>
+                                <th>Codgio Cliente</th>
+                                <th>Direccion</th>
+                                <th>Existencia</th>
+                                <th>Agregado</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" id="btn_registro" class="btn bg-orange"
+                        style="color: white !important;">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger"><i class="fas fa-ban"></i> Cancelar</a>
+
+                {% block btn_query_modal %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </form>
+
+    <script>
+        list.items.credit = {{ detail|safe }};
+        list.list();
+    </script>
+{% endblock %}

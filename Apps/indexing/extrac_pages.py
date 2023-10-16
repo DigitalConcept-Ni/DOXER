@@ -45,7 +45,7 @@ def extract_page(request):
 
         with transaction.atomic():
             dc = Documents()
-            dc.expedients_id = request['expedients']
+            dc.expedients_id = request['expedientsAdministration']
             dc.document_type_id = request['document_type']
             dc.date = request['date']
             dc.file = new_pdf

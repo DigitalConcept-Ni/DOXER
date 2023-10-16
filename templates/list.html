@@ -45,20 +45,18 @@
         </div>
         <!-- /.card-body -->
 
-        <div class="card-footer">
-            <a href="{{ create_url }}" type="button" id="btn_registro" class="btn bg-orange"
-               style="color: white !important;">
-                <i class="fas fa-plus"></i>Alta
-            </a>
-            {% block btn_query_modal %}
-
-            {% endblock %}
-        </div>
+{#        <div class="card-footer">#}
+{#            <a href="{{ create_url }}" type="button" id="btn_registro" class="btn bg-orange"#}
+{#               style="color: white !important;">#}
+{#                <i class="fas fa-plus"></i>Alta#}
+{#            </a>#}
+{#        </div>#}
     </div>
+    
+    {% block jsDtButtons %}
+    
+    {% endblock %}
 
 {% endblock %}
 
 
-{% block javascript %}
-
-{% endblock %}

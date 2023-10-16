@@ -11,33 +11,17 @@ from Apps.administration.models import Documents, Branches
 from Apps.user.models import *
 
 
-# class Document(models.Model):
-#     name = models.CharField(max_length=50, unique=True, verbose_name='Tipo Documento')
-#
-#     def __str__(self):
-#         return self.name
-#
-#     def toJSON(self):
-#         item = model_to_dict(self)
-#         return item
-#
-#     class Meta:
-#         verbose_name = 'Document'
-#         verbose_name_plural = 'Documents'
-#         ordering = ("id",)
-
-
 class Boxes(models.Model):
     branch = models.ForeignKey(Branches, on_delete=models.CASCADE, verbose_name='Sucursal')
     document = models.ForeignKey(Documents, on_delete=models.CASCADE)
-    personal_info = models.IntegerField(choices=lista_personals, default=0)
+    # personal_info = models.IntegerField(choices=lista_personals, default=0)
     code = models.CharField(max_length=10, unique=True, verbose_name='Caja')
     status = models.CharField(max_length=1, verbose_name='Estado')
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Usuario')
     # DATES
-    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha Registro')
-    start_date = models.DateField(default=datetime.now, verbose_name='Fecha Inicio')
-    end_date = models.DateField(default=datetime.now, verbose_name='Fecha Fin')
+    date_joined = models.DateField(format("YYYY-MM-DD"), default=datetime.now)
+    start_date = models.DateField(format("YYYY-MM-DD"), default=datetime.now)
+    end_date = models.DateField(format("YYYY-MM-DD"), default=datetime.now)
 
     def __str__(self):
         return self.branch.name + self.code
@@ -65,12 +49,9 @@ class Boxes(models.Model):
 # REFERENCES OF PERSONALS EXPEDIENTS FOR THE BOX
 class BoxDetailExpedients(models.Model):
     box = models.ForeignKey(Boxes, on_delete=models.CASCADE)
-    file_code = models.CharField(max_length=10)  # codigo archivo
-    client_code = models.CharField(max_length=10)  # codigo cliente
-    date_joined = models.DateField(default=datetime.now, verbose_name='Fecha Documento')
     names = models.CharField(max_length=30)
     surnames = models.CharField(max_length=30)
-    card_id = models.CharField(max_length=16)
+    card_id = models.CharField(max_length=14)
     address = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=8)
     # PART OF VALIDATION THE DOCUMENT
@@ -80,7 +61,7 @@ class BoxDetailExpedients(models.Model):
     # file = models.FileField(upload_to='administrativos/%Y/%m/%d', null=True, blank=True)f)
 
     def __str__(self):
-        return '{} -- {}'.format(self.file_code, self.client_code)
+        return '{} -- {}'.format(self.names, self.surnames)
 
     # def toLIST(self):
     #     item = [self.id, self.departament.name, self.serial.name, self.document_type.name, self.status,
@@ -136,7 +117,7 @@ class BoxDetailFileExpedients(models.Model):
     # date change notification
     date = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='Fecha de subida')
     # FILES
-    file = models.FileField(upload_to='expedients/%Y/%m/%d', null=True, blank=True)
+    file = models.FileField(upload_to='expedientsAdministration/%Y/%m/%d', null=True, blank=True)
 
     def toJSON(self):
         item = model_to_dict(self)

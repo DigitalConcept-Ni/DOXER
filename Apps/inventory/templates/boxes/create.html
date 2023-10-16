@@ -1,0 +1,188 @@
+{% extends 'list.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block head_list %}
+    <!-- Etiquetas para select2 -->
+    <link href="{% static 'lib/select2-4.0.13/css/select2.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'lib/select2-4.0.13/css/select2-bootstrap4.min.css' %}" rel="stylesheet"/>
+    <script src="{% static 'lib/select2-4.0.13/js/select2.min.js' %}"></script>
+    <script src="{% static 'lib/select2-4.0.13/js/i18n/es.js' %}"></script>
+    <script src="{% static 'js/boxes/boxCreateExpedients.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <form action="." method="post">
+        <div class="card card-navy card-outline ">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i class="fas fa-edit"></i>
+                    {{ title }}
+                </h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="{{ action }}">
+                <input type="hidden" name="currentUser" value="{{ request.user.id }}">
+                <input type="hidden" name="username" value="{{ request.user.username }}">
+                <!--INSERTAR Y INFORMACION DE LA CAJA  -->
+                <div class="row">
+
+                    <!-- LADO IZQUIERDO / INSERCION DE DATOS(CLIENTES - CREDITO - FECHA CANCELADO) -->
+                    <div class="col-md-8">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-box"></i> Datos de expedientes</h3>
+                            </div>
+                            <div class="card-body">
+                                <!-- ROW CLIENTE -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Cliente:</label>
+                                            <input type="text" class="form-control" id="client">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END ROW CLIENTE -->
+
+                                <!-- ROW CREDITO / FECHA CANCELADO / BTN INSERTAR -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Credito:</label>
+                                            <input type="text" class="form-control" id="credit">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Fecha Cancelado: </label>
+                                            <input type="date" class="form-control" id="date">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 text-center"
+                                         style="display: flex; align-items: flex-end; justify-content: center">
+                                        <div class="form-group text-center">
+                                            <a type="button" class="btn" id="insert_credit"
+                                               style="background: #001f3f; color: white"><input type="button"
+                                                                                                id="insert_cred"
+                                                                                                style="background: transparent; border:none;">
+                                                Insertar</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--// EDN  ROW CREDITO / FECHA CANCELADO / BTN INSERTAR -->
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LADO DERECHO / INSERCION DE DATOS DE LA LISTA-->
+                    <div class="col-md-4">
+                        <div class="card card-secondary">
+                            <div class="card-header">
+                                <h3 class="card-title"><i class="fas fa-list"></i> Datos de caja</h3>
+                            </div>
+                            <div class="card-body">
+
+                                <!-- START FIRTS ROW -->
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Sucursal: </label>
+                                            {{ form.branch }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END FIRTS ROW -->
+
+                                <!-- START SECOND ROW -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Caja: </label>
+                                            {{ form.box|attr:'autocomplete:off' }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>Fecha de realizacion: </label>
+                                            {{ form.date_joined }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END SECOND ROW -->
+
+                                <!-- START THIRD ROW // FILA DEL USUARIO ACTUAL OCULTA POR DISEÑO-->
+                                <div class="row" style="display: none">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label>Usuario: </label>
+                                            {% if action == 'add' %}
+                                                <input type="hidden" id="id_user" value="{{ request.user.id }}"
+                                                       class="form-control"
+                                                       readonly>
+                                                <input type="text" value="{{ request.user.username }}"
+                                                       class="form-control"
+                                                       readonly>
+                                            {% elif action == 'edit' %}
+                                                {{ form.user }}
+                                            {% endif %}
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- // END SECOND ROW -->
+
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <!-- DATOS INSERTADOS / TABLA DONDE SE MUESTRAN LOS DATOS INSERTADOS -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-borderless" id="tbListas">
+                            <thead>
+                            <tr>
+                                <th style="width: 5%">Id</th>
+                                <th style="width: 45%">Cliente</th>
+                                <th style="width: 20%">Credito</th>
+                                <th style="width: 15%">Fecha Cancelado</th>
+                                <th style="width: 5%">A&ntilde;o</th>
+                                <th style="width: 5%">Existencia</th>
+                                <th style="width: 5%">Agregado</th>
+                            </tr>
+
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+                <button type="submit" id="btn_registro" class="btn bg-orange"
+                        style="color: white !important;">
+                    <i class="fas fa-save"></i> Guardar
+                </button>
+                <a href="{{ list_url }}" class="btn btn-danger"><i class="fas fa-ban"></i> Cancelar</a>
+
+                {% block btn_query_modal %}
+
+                {% endblock %}
+            </div>
+        </div>
+    </form>
+
+    <script>
+        list.items.credit = {{ detail|safe }};
+        list.list();
+    </script>
+{% endblock %}

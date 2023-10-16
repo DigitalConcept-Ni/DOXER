@@ -158,14 +158,14 @@ from config import settings
 #         verbose_name_plural = 'Personals'
 #         ordering = ("id",)
 # class Documents(models.Model):
-#     expedients = models.ForeignKey(Expedients, on_delete=models.CASCADE)
+#     expedientsAdministration = models.ForeignKey(Expedients, on_delete=models.CASCADE)
 #     name = models.ForeignKey(Document_type, on_delete=models.CASCADE)
 #     date = models.DateField(format("YYYY-MM-DD"), null=True, blank=True)  # Date of document
 #     # ARCHIVOS
 #     file = models.FileField(upload_to='administrativos/%Y/%m/%d', null=True, blank=True)
 #
 #     def __str__(self):
-#         return '{}'.format(self.expedients)
+#         return '{}'.format(self.expedientsAdministration)
 #
 #     def get_archivo(self):
 #         if self.file:
@@ -173,14 +173,14 @@ from config import settings
 #         return 'No insertado'
 #
 #     def toList(self):
-#         item = [self.id, self.expedients_id, self.document_type.name, self.date, self.file, self.expedients.file_code,
-#                 self.expedients.client_code]
+#         item = [self.id, self.expedients_id, self.document_type.name, self.date, self.file, self.expedientsAdministration.file_code,
+#                 self.expedientsAdministration.client_code]
 #         return item
 #
 #     def toJSON(self):
 #         item = model_to_dict(self)
-#         item['file_code'] = self.expedients.file_code
-#         item['client_code'] = self.expedients.client_code
+#         item['file_code'] = self.expedientsAdministration.file_code
+#         item['client_code'] = self.expedientsAdministration.client_code
 #         item['document_type'] = self.document_type.name
 #         if self.date:
 #             item['date'] = self.date.strftime("%Y-%m-%d")

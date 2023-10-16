@@ -60,6 +60,20 @@ const drawTables = async (data) => {
     if (header === true) {
         tableData = $(`#${data.table}`).DataTable({
             // dom: 'Btip',
+            buttons: {
+                dom: {
+                    button: {
+                        className: 'btn'
+                    }
+                },
+                buttons: [
+                    {
+                        extend: "excel",
+                        text: 'Exportar a Excel',
+                        className: 'btn btn-outline-success'
+                    }
+                ]
+            },
             deferRender: true,
             responsive: true,
             autoWidth: false,
@@ -68,9 +82,10 @@ const drawTables = async (data) => {
             ajax: {
                 url: data.url,
                 type: 'POST',
-                data: {
-                    'action': data.action,
-                },
+                data: data.data,
+                // data: {
+                //     'action': data.action,
+                // },
                 dataSrc: ""
             },
             columnDefs: data.config,
